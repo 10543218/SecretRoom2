@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+		<title>線上密室逃脫 作者:小智</title>
+		
+		<style type="text/css">
+			body{
+				<!-- background-color: black; -->
+			}
+			
+			.cen{
+				display: flex;
+				justify-content: center; 
+				align-items: center;
+			}
+			
+			.screenBG{
+				background-color: #ddd;		
+				width: 510px;
+				height: 510px;
+				position: relative;
+				
+			}
+			
+			.screenLeft{
+				background-color: #999;		
+				width: 300px;
+				height: 510px;
+				position: relative;
+			}
+			
+			
+			
+			.me{
+				width: 30px;
+				height: 30px;
+				background-color: red;
+				position: absolute;
+			}
+			
+			.levOne{
+				background-color: orange;
+				width: 30px;
+				height: 30px;
+				position: absolute;
+				top: 30px;
+				left: 30px;
+			}
+			.levTwo{
+				background-color: yellow;
+				width: 30px;
+				height: 30px;
+				position: absolute;
+				top: 30px;
+				right: 30px;
+			}
+			.levThr{
+				background-color: blue;
+				width: 30px;
+				height: 30px;
+				position: absolute;
+				top: 450px;
+				left: 30px;
+			}
+			.levFou{
+				background-color: purple;
+				width: 30px;
+				height: 30px;
+				position: absolute;
+				top: 450px;
+				right: 30px;
+			}
+			
+			.question{
+				width: 80%;
+				background-color: #ddd;
+				position: absolute;
+				left: 10%;
+				top: 20px;
+				height: 300px;
+				font-family: Tahoma;
+				font-size: 26px;
+				display: flex;
+				justify-content: center; 
+				align-items: center;
+				
+				
+			}
+			
+			.quesText{
+				width: 90%;
+				height: 90%;
+				word-wrap: break-word; 
+				word-break: normal;				
+			}
+			
+			.questInput{
+				width: 78%;
+				position: absolute;
+				left: 10%;
+				top: calc(30px + 60%);
+				height: 25px;
+				border: 2px black solid;
+				font-size: 24px;
+			}
+			.ansLeft{
+				width: 80%;
+				position: absolute;
+				left: 10%;
+				top: calc(30px + 70%);
+				font-family: Tahoma;
+				background-color: #ccc;
+				height: 20%;
+				text-align: center;
+				display: flex;
+				justify-content: center; 
+				align-items: center;
+				font-size: 32px;
+			}
+			#ansBtnLeft{
+				width: 100%;
+				height: 100%;
+				font-size: 26px;
+				background-color: #CCCCFF;
+				border-style: solid;
+				border-color: #000;
+			}
+			
+			#ansBtnLeft:hover{
+				background-color: #aaaadd;
+			}
+			
+			.screenRight{
+				background-color: #888;		
+				width: 300px;
+				height: 510px;
+				position: relative;
+				display: flex;
+				justify-content: center;
+			}
+			
+			.time{
+				width: 90%;
+				background-color: #ccc;
+				height: 30%;
+				position: absolute;
+				top: 3%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			
+			.timeText{
+				font-size: 80px;
+			}
+			
+			.textarea{
+				width: 90%;
+				background-color: #aaa;
+				height: 50%;
+				position: absolute;
+				top: 36%;
+				
+			}
+			
+			.textareaText{
+				width: 98%;
+				height: 100%;
+				resize: none;
+				font-size: 30px;
+			}
+		
+			
+			.finalInput{
+				width: 87%;
+				position: absolute;
+				left: 5%;
+				top: calc(30px + 85%);
+				height: 25px;
+				border: 2px black solid;
+				font-size: 20px;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div class='cen'>
+			<div class="screenLeft">
+				<div class="question">
+					<div class="quesText"></div>
+				</div>
+				<input class="questInput" type="text" placeholder="請輸入該題答案">
+				<div class="ansLeft">
+					<input type="button" id="ansBtnLeft" value="按我繳交答案">
+				</div>
+			</div>
+			<div class='screenBG'>
+				<div class="levOne"></div>
+				<div class="levTwo"></div>
+				<div class="levThr"></div>
+				<div class="levFou"></div>
+				<div class="me" id="box"></div>
+			</div>
+			<div class="screenRight">
+				<div class="time">
+					<div class="timeText">15:00</div>
+				</div>
+				<div class="textarea">
+					<textarea name="text" class="textareaText" placeholder="">這裡是你的筆記置放處喔!紅點是你!</textarea>
+				</div>
+				<input class="finalInput" type="text" placeholder="輸入通關密碼贏得比賽!">
+			</div>
+		</div>
+		
+	</body>
+	
+	<script type="text/javascript">
+		var box = document.getElementById("box");  // 獲取頁面元素的參照指標
+		var interval = 30;
+		var boxLeft = 240;  // 自己的x
+		var boxTop = 240;  // 自己的y
+		
+		box.style.left = boxLeft + "px";
+		box.style.top = boxTop + "px";
+		
+		var min = 15;
+		var sec = 0;
+		
+		var timeText = document.getElementsByClassName("timeText");
+		var quesText = document.getElementsByClassName("quesText");
+		var finalInput = document.getElementsByClassName("finalInput");
+		
+		
+		var ans = "";
+		var finalAns = "通關密碼贏得比賽!";
+		var AnsArray = ["3332","9","老虎","D"];
+		
+		setInterval(function(){ 
+			if(sec > 0){
+				sec -= 1;
+				timeText[0].innerHTML = ((sec<10)?(min + ":0" + sec):(min + ":" + sec));
+			}else if(sec==0){
+				min -= 1;
+				sec = 59;
+				timeText[0].innerHTML = min + ":" + sec;
+			}else{
+				sec -= 1;
+			}
+			
+			// 30 450
+			
+			if(boxLeft==30 && boxTop==30){
+				quesText[0].innerHTML="a:?，b:?，c:?，d:?";
+				ans = AnsArray[0];
+			}else if(boxLeft==450 && boxTop==30){
+				quesText[0].innerHTML="7533?67，?要填哪個數字呢";
+				ans = AnsArray[1];
+			}else if(boxLeft==30 && boxTop==450){
+				quesText[0].innerHTML="xl3cj3";
+				ans = AnsArray[2];
+			}else if(boxLeft==450 && boxTop==450){
+				quesText[0].innerHTML="c=>A，i=>G，f=>?";
+				ans = AnsArray[3];
+			}else{
+				quesText[0].innerHTML="";
+			}
+			
+			if(finalInput[0].value == finalAns){
+				alert("恭喜你過關! 還剩下" + min + "分"+ sec + "秒");
+				finalAns = "遊戲結束";
+			}
+		}, 1000);
+		
+		console.log(boxLeft+","+boxTop);
+
+
+
+		var questInput = document.getElementsByClassName("questInput");
+		var ansBtnLeft = document.getElementById("ansBtnLeft");
+		
+		ansBtnLeft.addEventListener('click',function(e){
+			if(questInput[0].value == ans){
+				if(ans==AnsArray[0]){
+					alert("「我錯了嗎！你有敬老尊賢嗎？」，此人的某首歌...");
+				}else if(ans==AnsArray[1]){
+					alert("某題的答案是一種動物");
+				}else if(ans==AnsArray[2]){
+					alert("輸入1 => 1，輸入我的 => 我的，輸入好好!=>好好!");
+				}else{
+					alert("a b b c d a c d c a b");
+				}
+			}
+			
+			console.log();
+		},false);
+		
+		
+		
+		document.onkeydown = keyDown;  //在Document物件中註冊keyDown事件處理常式
+		function keyDown(event){  // 方向鍵控制元素移動函數
+			var event = event || window.event;  // 標準化事件物件
+			
+			switch(event.keyCode){
+				case 37 :  // 按下左箭頭鍵
+					if(boxLeft>0){
+						boxLeft -= interval;
+						box.style.left = boxLeft + "px";
+						break;
+					}else{
+						break;
+					}
+					
+				case 39 :  // 按下右箭頭鍵
+					if(boxLeft<(510-interval)){
+						boxLeft += interval;
+						box.style.left = boxLeft + "px";
+						break;
+					}else{
+						break;
+					}
+					
+				case 38 :  // 按下上箭頭鍵
+					if(boxTop > 0){
+						boxTop -= interval;
+						box.style.top = boxTop + "px";
+						break;
+					}else{
+						break;
+					}
+				case 40 :  // 按下下箭頭鍵
+					if(boxTop<510-interval){
+						boxTop += interval;
+						box.style.top = boxTop + "px";
+						break;
+					}else{
+						break;
+					}
+			}
+			<!-- return false -->
+		}
+			
+		
+
+		
+		
+		
+		<!-- setInterval(function(){  -->
+			<!-- console.log(boxTop+","+boxLeft);  -->
+		<!-- }, 5000); -->
+		
+		
+			<!-- 鍵盤事件 -->
+			<!-- https://tw511.com/a/01/2716.html -->
+			
+			<!-- setInterval -->
+			<!-- https://www.w3schools.com/jsref/met_win_setinterval.asp -->
+	</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
